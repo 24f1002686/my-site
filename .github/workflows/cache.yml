@@ -1,23 +1,26 @@
-name: Cache Test Workflow
+name: Cache and Email Test Workflow
 
 on:
   push:
     branches:
-      - main  # or master
+      - main
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
+      # 1️⃣ Checkout repository
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Set up Node.js (example dependency)
+      # 2️⃣ Setup Node.js (or your environment)
+      - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
           node-version: "20"
 
+      # 3️⃣ Cache dependencies
       - name: Cache dependencies
         id: cache-step
         uses: actions/cache@v4
@@ -27,10 +30,16 @@ jobs:
           restore-keys: |
             cache-3b78282
 
+      # 4️⃣ Prime cache step
       - name: prime-cache-3b78282
         run: |
-          if [ -n "${{ steps.cache-step.outputs.cache-hit }}" ]; then
-            echo "Cache hit: ${{ steps.cache-step.outputs.cache-hit }}"
+          if [ "${{ steps.cache-step.outputs.cache-hit }}" == "true" ]; then
+            echo "Cache hit"
           else
             echo "Cache miss"
           fi
+
+      # 5️⃣ Email test step
+      - name: 24f1002686@ds.study.iitm.ac.in
+        run: |
+          echo "Hello from email test step!"
